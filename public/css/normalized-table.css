@@ -1,0 +1,257 @@
+/**
+ * CSS untuk Tabel yang Dinormalisasi
+ * Styling khusus untuk tampilan data yang sudah dipisah menjadi baris terpisah
+ */
+
+/* Container untuk tabel yang dinormalisasi */
+.normalized-table-container {
+    position: relative;
+}
+
+/* Toggle button untuk normalisasi */
+.normalization-toggle {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    z-index: 10;
+}
+
+/* Styling untuk baris yang sudah dinormalisasi */
+tr.normalized {
+    transition: all 0.3s ease;
+}
+
+/* Baris yang tidak menampilkan NO dan PROYEK */
+tr.normalized td:first-child,
+tr.normalized td:nth-child(2) {
+    position: relative;
+}
+
+/* Indikator visual untuk baris yang terkait */
+tr.normalized:not(:first-of-type) td:first-child::before,
+tr.normalized:not(:first-of-type) td:nth-child(2)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+    border-radius: 0 2px 2px 0;
+}
+
+/* Hover effect untuk baris yang dinormalisasi */
+tr.normalized:hover {
+    background-color: #f0f9ff !important;
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling untuk sel yang kosong (NO dan PROYEK di baris selanjutnya) */
+tr.normalized td:first-child:empty,
+tr.normalized td:nth-child(2):empty {
+    background-color: #f8fafc;
+    border-left: 3px solid #e2e8f0;
+}
+
+/* Styling untuk data dengan newline (sebelum dinormalisasi) */
+td[data-has-newline="true"] {
+    white-space: pre-line;
+    line-height: 1.6;
+    vertical-align: top;
+    padding: 8px 12px;
+}
+
+/* Indikator visual untuk data yang bisa dinormalisasi */
+td[data-can-normalize="true"] {
+    position: relative;
+}
+
+td[data-can-normalize="true"]::after {
+    content: '📊';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+    opacity: 0.6;
+    cursor: help;
+}
+
+/* Badge untuk menunjukkan data yang dinormalisasi */
+.normalization-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+.normalization-badge::before {
+    content: '📊';
+    margin-right: 4px;
+}
+
+/* Animation untuk proses normalisasi */
+@keyframes normalizeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+tr.normalized {
+    animation: normalizeIn 0.3s ease-out;
+}
+
+/* Responsive design untuk tabel yang dinormalisasi */
+@media (max-width: 768px) {
+    .normalized-table-container {
+        overflow-x: auto;
+    }
+    
+    tr.normalized td {
+        min-width: 120px;
+        font-size: 14px;
+    }
+    
+    tr.normalized td:first-child,
+    tr.normalized td:nth-child(2) {
+        min-width: 80px;
+    }
+}
+
+/* Styling untuk tombol toggle */
+.btn-normalize {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-normalize:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-normalize:active {
+    transform: translateY(0);
+}
+
+.btn-normalize.btn-reset {
+    background-color: #ef4444;
+}
+
+.btn-normalize.btn-reset:hover {
+    background-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Icon untuk tombol */
+.btn-normalize::before {
+    content: '🔄';
+    font-size: 16px;
+}
+
+.btn-normalize.btn-reset::before {
+    content: '↩️';
+}
+
+/* Loading state untuk tombol */
+.btn-normalize.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-normalize.loading::before {
+    content: '⏳';
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Tooltip untuk menjelaskan normalisasi */
+.normalization-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.normalization-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #1f2937;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.normalization-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Styling untuk pesan informasi */
+.normalization-info {
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+    color: #0c4a6e;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.normalization-info::before {
+    content: 'ℹ️';
+    font-size: 16px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    tr.normalized:hover {
+        background-color: #1e293b !important;
+    }
+    
+    tr.normalized td:first-child:empty,
+    tr.normalized td:nth-child(2):empty {
+        background-color: #334155;
+        border-left-color: #475569;
+    }
+    
+    .normalization-badge {
+        background-color: #1e3a8a;
+        color: #93c5fd;
+    }
+}
